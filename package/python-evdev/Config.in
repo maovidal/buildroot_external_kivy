@@ -1,0 +1,9 @@
+config BR2_PACKAGE_PYTHON_EVDEV
+    bool "python-evdev"
+    help
+        Provides bindings to the generic input event
+        interface in Linux by passing events generated
+        in the kernel directly to userspace through
+        character devices e.g. in /dev/input/.
+        
+        http://python-evdev.rtfd.org/

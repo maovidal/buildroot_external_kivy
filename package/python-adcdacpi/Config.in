@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_ADCDACPI
+    bool "python-adcdacpi"
+    help
+        Python Library to use with ADCDAC Pi Raspberry Pi expansion board.
+        
+        https://www.abelectronics.co.uk

@@ -1,0 +1,4 @@
+config BR2_PACKAGE_PYTHON_PWM
+    bool "python-pwm"
+    help
+        Python class to work with the Linux PWM kernel driver.

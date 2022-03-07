@@ -1,0 +1,7 @@
+config BR2_PACKAGE_HOST_PYTHON_CYTHON_V02926
+    bool "host python-cython-v02926"
+    help
+      The Cython compiler for writing C extensions for the Python
+      language.
+
+      http://cython.org/

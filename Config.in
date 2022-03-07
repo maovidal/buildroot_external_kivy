@@ -1,0 +1,6 @@
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-kivy/Config.in"
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-cython-v0282/Config.in.host"
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-cython-v02926/Config.in.host"
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-evdev/Config.in"
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-adcdacpi/Config.in"
+source "$BR2_EXTERNAL_MYRPI2CFG_PATH/package/python-pwm/Config.in"

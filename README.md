@@ -2,10 +2,14 @@
 
 **Help and pull requests are welcome**
 
-This implements Buildroot's mechanism [BR2_EXTERNAL tree][DOC_BR2_EXTERNAL] to build an image that runs a `Kivy` app.
+The Intel Stick implementation of Kivy still does not work.
+
+Kivy works on Raspberry Pi 2. See the section below "Extra work on Raspberry Pi2" for other challenges to resolve.
+
+The purpose of this repo is to use `Buildroot` to produce images that run a `Kivy` app.
 Currently `Raspberry Pi2` and `Intel Stick STK1AW32SC` have been tested.
 
-Part of the content of this repo has been based on [this great post that shows how to build Kivy running on a RP2][evgueni_post] by [evgueni][evgueni].
+This repo is meant to be used implementing Buildroot's [BR2_EXTERNAL tree][DOC_BR2_EXTERNAL] mechanism.
 
 
 # Quick setup:
@@ -32,7 +36,7 @@ git clone https://github.com/MrMauro/buildroot_external-kivy externals/kivy
 docker build -t "advancedclimatesystems/buildroot" .
 ```
 
-4. Create a [data-only container][data-only]:
+4. Create a `data-only` container:
 
 ``` shell
 docker run -i --name buildroot_output advancedclimatesystems/buildroot /bin/echo "Data only."
@@ -66,6 +70,7 @@ These are the two relevant folders on your host:
 
 Also, the `target` folder is provided just to ease checking the building process.
 
+
 # Usage
 
 A small script has been provided to make using the container a little easier.
@@ -81,11 +86,13 @@ Then you can use usual commands like this:
 ```
 
 
-# Configurations available
+# Extra work with the Raspberry Pi2
 
-The following configurations are available that have been being implemented while following [this post that shows how to build Kivy running on a RP2][evgueni_post].
+*This is still work in progress*
 
-The shell commands here use the `run.sh` script in case the [docker-buildroot][docker-buildroot] is used. Otherwise in a normal Buildroot installation, those are meant to be issued without `./scripts/run.sh`
+The next content has been based on [this great post that shows how to build Kivy running on a RP2][evgueni_post] by [evgueni][evgueni] with the idea to extend the use of the image produced for the `Pi2`.
+
+The shell commands here are based on the `run.sh` script in case the [docker-buildroot][docker-buildroot] is used. Otherwise in a normal Buildroot installation, those are meant to be issued without `./scripts/run.sh`.
 
 **myrpi2_defconfig**
 
@@ -168,6 +175,12 @@ A modified configuration can be saved using something like this (replacing the t
 ```shell
 ./scripts/run.sh make BR2_DEFCONFIG=/root/buildroot/externals/kivy/configs/mycustom_defconfig savedefconfig
 ```
+
+# License
+
+This software is licensed under MIT License.
+
+&copy; 2022 Mauricio Vidal.
 
 [docker_buildroot]:https://github.com/vidalastudillo/docker-buildroot
 [br2_external]:http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom

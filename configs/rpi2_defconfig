@@ -1,0 +1,65 @@
+# ##############################################################################
+# From Buildroot's original rpi2_defconfig
+# ##############################################################################
+
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_SYSTEM_DHCP="eth0"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,581049d718caf95f5feb00607ac748d5841cf27c)/linux-581049d718caf95f5feb00607ac748d5841cf27c.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
+### Replaced: BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi/config_default.txt"
+# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+### Replaced: BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+
+
+# ##############################################################################
+# Customization
+# ##############################################################################
+
+BR2_CCACHE=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+# Without this the device will complain at boot: failed to load regulatory.db
+BR2_PACKAGE_WIRELESS_REGDB=y
+
+# Custom config
+BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/raspberry/pi2/singleboot/config.txt"
+
+# Overlay
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_KIVYCFG_PATH)/rootfs_overlay"
+
+# Exact size
+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+
+
+# ##############################################################################
+# Kivy graphics support
+# RPi2 uses Open GL ES. Then, inspecting BR2_PACKAGE_HAS_LIBGLES on menuconfig
+# it should be true.
+# ##############################################################################
+
+BR2_PACKAGE_PYTHON_KIVY=y
+
+BR2_PACKAGE_RPI_USERLAND=y  # Provides graphics hardware
+BR2_PACKAGE_SDL=y  # To determine
+BR2_PACKAGE_SDL2_OPENGLES=y  # OpenGLES support (Like Raspberry Pi2)

@@ -1,0 +1,112 @@
+# ##############################################################################
+# From Buildroot's original pc_x86_64_efi_defconfig
+# ##############################################################################
+
+BR2_x86_64=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.231"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_LINUX_FIRMWARE=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=y
+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+BR2_PACKAGE_ACPID=y
+### Removed: BR2_PACKAGE_CONNMAN=y
+### Removed: BR2_PACKAGE_CONNMAN_WIFI=y
+### Removed: BR2_PACKAGE_CONNMAN_CLIENT=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+### Replaced: BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_X86_64_EFI=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+
+
+# ##############################################################################
+# Customization
+# ##############################################################################
+
+BR2_CCACHE=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+# Without this the device will complain at boot: failed to load regulatory.db
+BR2_PACKAGE_WIRELESS_REGDB=y
+
+# Processor
+BR2_x86_atom=y
+
+# Kernel additional configuration
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/pc/intelstick/kernel/linux.fragment"
+
+# Overlay
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_KIVYCFG_PATH)/rootfs_overlay"
+
+# Exact size
+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+
+
+# ##############################################################################
+# Kivy graphics support
+# Intel Stick STK1AW32SC uses Open GL. Then, inspecting BR2_PACKAGE_HAS_LIBGL / (testing) BR2_PACKAGE_HAS_LIBEGL on menuconfig
+# it should be true.
+# ##############################################################################
+
+BR2_PACKAGE_PYTHON_KIVY=y
+
+BR2_PACKAGE_SDL2_OPENGL  # OpenGL support
+BR2_PACKAGE_XORG7=y  # Required by SDL2 Open GL
+BR2_PACKAGE_LIBGLVND=y  # Required by BR2_PACKAGE_XORG7
+BR2_PACKAGE_LIBGLVND_DISPATCH_GL=y  # Required by BR2_PACKAGE_XORG7
+BR2_PACKAGE_SDL2_X11=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+BR2_PACKAGE_XLIB_LIBXRENDER=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+
+# Package selection specific for Intel devices with GPU i915 (Like STK1AW32SC). HELP with better detection of compatible devices.
+    # select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915 if BR2_x86_atom
+    # select BR2_PACKAGE_MESA3D_DRI_DRIVER_I915 if BR2_x86_atom
+
+# # Package selection for devices different than Raspberry Pi 2. HELP with better detection of compatible devices.
+#     # select BR2_PACKAGE_XORG7 if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
+#     select BR2_PACKAGE_MESA3D if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
+
+# # Mesa3D and OpenGL support.
+#     select BR2_PACKAGE_MESA3D_OPENGL_ES if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBGLES
+#     select BR2_PACKAGE_MESA3D_OPENGL_EGL if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBEGL
+#     select BR2_PACKAGE_MESA3D_OPENGL_GLX if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBEGL
+
+    # select BR2_PACKAGE_LIBGLVND  # Not? Por JMVA resolviendo para Intel Stick. ESTE DESHABILITA SDL2
+    # select BR2_PACKAGE_XSERVER_XORG_SERVER if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
+
+    # Testing
+    # select BR2_PACKAGE_SDL2_X11 # Does not prevent error EGL/egl.h
+
+    # Testing
+    # select BR2_PACKAGE_LIBGLVND if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
+    # select BR2_PACKAGE_LIBGLVND_DISPATCH_GL if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4

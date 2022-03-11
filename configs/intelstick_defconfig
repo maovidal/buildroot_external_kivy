@@ -64,7 +64,7 @@ BR2_PACKAGE_WIRELESS_REGDB=y
 BR2_x86_atom=y
 
 # Kernel additional configuration
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/pc/intelstick/kernel/linux.fragment"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/pc/STK1AW32SC/kernel/linux.fragment"
 
 # Overlay
 BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_KIVYCFG_PATH)/rootfs_overlay"

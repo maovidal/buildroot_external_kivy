@@ -37,7 +37,6 @@ BR2_PACKAGE_HOST_MTOOLS=y
 
 BR2_CCACHE=y
 BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
 # Without this the device will complain at boot: failed to load regulatory.db
 BR2_PACKAGE_WIRELESS_REGDB=y

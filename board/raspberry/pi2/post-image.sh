@@ -2,7 +2,7 @@
 
 set -e
 
-BOARD_DIR=$BR2_EXTERNAL_MYRPI2CFG_PATH/board/raspberrypi2
+BOARD_DIR=$BR2_EXTERNAL_KIVYCFG_PATH/board/raspberrypi2
 BOARD_NAME="$(basename ${BOARD_DIR})"
 GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"

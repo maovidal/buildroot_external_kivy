@@ -1,7 +1,0 @@
-config BR2_PACKAGE_HOST_PYTHON_CYTHON_V0282
-    bool "host python-cython-v0282"
-    help
-      The Cython compiler for writing C extensions for the Python
-      language.
-
-      http://cython.org/

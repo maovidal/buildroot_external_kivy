@@ -1,7 +1,5 @@
 # Intro
 
-**Work in progress**
-
 **Help and pull requests are welcome**
 
 This implements Buildroot's mechanism [BR2_EXTERNAL tree][DOC_BR2_EXTERNAL] to build an image that runs a `Kivy` app.
@@ -49,13 +47,13 @@ Buildroot downloads all data to the first volume, the last volume is used as bui
 ./scripts/run.sh make BR2_EXTERNAL=/root/buildroot/externals/kivy menuconfig
 ```
 
-For Raspberry Pi 2:
+For `Raspberry Pi 2`:
 
 ``` shell
 ./scripts/run.sh make rpi2_defconfig
 ```
 
-For Intel Stick:
+For `Intel Stick`:
 
 ``` shell
 ./scripts/run.sh make intelstick_defconfig
@@ -165,12 +163,13 @@ Modified from original post:
 
 ## Saving configs
 
-A modified configuration can be saved using something like this (replacing the text '<mycustom>'):
+A modified configuration can be saved using something like this (replacing the text 'mycustom'):
 
 ```shell
-./scripts/run.sh make BR2_DEFCONFIG=/root/buildroot/externals/kivy/configs/<mycustom>_defconfig savedefconfig
+./scripts/run.sh make BR2_DEFCONFIG=/root/buildroot/externals/kivy/configs/mycustom_defconfig savedefconfig
 ```
 
+[docker_buildroot]:https://github.com/vidalastudillo/docker-buildroot
 [br2_external]:http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom
 [DOC_BR2_EXTERNAL]:https://buildroot.org/downloads/manual/manual.html#customize-dir-structure
 [evgueni]:https://forums.raspberrypi.com/memberlist.php?mode=viewprofile&u=208985&sid=be8a772e5aef87a4991576d69e510cce

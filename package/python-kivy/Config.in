@@ -1,26 +1,52 @@
 config BR2_PACKAGE_PYTHON_KIVY
     bool "python-kivy"
-    select BR2_PACKAGE_HOST_PYTHON_CYTHON_V02926
-    select BR2_PACKAGE_LIBPNG # runtime
-    select BR2_PACKAGE_MTDEV # runtime
+    default n
+
+    # This is required according to official Kivy documentation and from 
+    # inspecting different builds results.
+    select BR2_PACKAGE_HOST_PYTHON_CYTHON
     select BR2_PACKAGE_PYTHON3
-    select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
-    select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
-    select BR2_PACKAGE_RPI_USERLAND # GL drivers
-    select BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_IMAGE
-    select BR2_PACKAGE_SDL_IMAGE_BMP
-    select BR2_PACKAGE_SDL_IMAGE_JPEG
-    select BR2_PACKAGE_SDL_IMAGE_PNG
-    select BR2_PACKAGE_SDL_MIXER
-    select BR2_PACKAGE_SDL_TTF
-    select BR2_PACKAGE_SDL2
-    select BR2_PACKAGE_SDL2_IMAGE
-    select BR2_PACKAGE_SDL2_MIXER
-    select BR2_PACKAGE_SDL2_TTF
-    select BR2_PACKAGE_SDL2_OPENGLES		
+    select BR2_PACKAGE_SDL2  # libsdl2-dev Required by Kivy 2.1
+    select BR2_PACKAGE_SDL2_IMAGE  # libsdl2-image-dev Required by Kivy 2.1
+    select BR2_PACKAGE_SDL2_MIXER  # libsdl2-mixer-dev Required by Kivy 2.1
+    select BR2_PACKAGE_SDL2_TTF  # libsdl2-ttf-dev Required by Kivy 2.1
+    # PACKAGE CANDIDATE NOT FOUND YET for: # libportmidi-dev Required by Kivy 2.1
+    # libswscale-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
+    # libavformat-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
+    # libavcodec-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
+    select BR2_PACKAGE_ZLIB  # zlib1g-dev Required by Kivy 2.1 (This package selection in yet to be confirmed)
+    # select BR2_PACKAGE_PANGO  # Missing during build if not selected. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
+    # select BR2_PACKAGE_PANGOMM  # C++ API for Pango
+
+    # To determine if those are required with 2.1 for Raspberry Pi 2
+    select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_SDL
+    select BR2_PACKAGE_SDL_IMAGE_BMP if BR2_PACKAGE_SDL
+    select BR2_PACKAGE_SDL_IMAGE_JPEG if BR2_PACKAGE_SDL
+    select BR2_PACKAGE_SDL_IMAGE_PNG if BR2_PACKAGE_SDL
+    select BR2_PACKAGE_SDL_MIXER if BR2_PACKAGE_SDL
+    select BR2_PACKAGE_SDL_TTF if BR2_PACKAGE_SDL
+
+    # To determine if those can be optional
+    select BR2_PACKAGE_MTDEV  # Previous RPi2 package. And post v6. Also complains at deployment if not selected
+    select BR2_PACKAGE_LIBPNG  # Previous RPi2 package. And post v6
+    select BR2_PACKAGE_PYTHON_DOCUTILS  # Optional?
+    select BR2_PACKAGE_PYTHON_PYGMENTS  # Optional?
+
+    # To make optional
+    # select BR2_PACKAGE_GSTREAMER1  # libgstreamer1.0 gstreamer Optional by Kivy 2.1 for audio, video
+    # select BR2_PACKAGE_GST1_PLUGINS_BASE  # gstreamer1.0-plugins-base Optional by Kivy 2.1 for audio, video
+    # select BR2_PACKAGE_GST1_PLUGINS_GOOD  # gstreamer1.0-plugins-good Optional by Kivy 2.1 for audio, video
+    # select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO  # Otherwise we get at compile WARNING A problem occurred while running pkg-config --libs --cflags pangoft2 (code 1)
+
     help
         A software library for rapid development of
         hardware-accelerated multitouch applications.
 
         http://kivy.org
+
+
+# Yet to be determined:
+    # select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2 # Otherwise get at compile gl_redirect.h fatal error GLES2/gl2.h No such file or directory 
+    # PANGO!!!
+    # Are those relevant?
+    # BR2_PACKAGE_LIBAVL related to libavcodec-dev

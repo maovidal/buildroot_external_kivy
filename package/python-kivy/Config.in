@@ -2,8 +2,8 @@ config BR2_PACKAGE_PYTHON_KIVY
     bool "python-kivy"
     default n
 
-    # This is required according to official Kivy documentation and from 
-    # inspecting different builds results.
+    # According to official Kivy documentation and from inspecting different
+    # build results the next are required:
     select BR2_PACKAGE_HOST_PYTHON_CYTHON
     select BR2_PACKAGE_PYTHON3
     select BR2_PACKAGE_SDL2  # libsdl2-dev Required by Kivy 2.1
@@ -15,38 +15,96 @@ config BR2_PACKAGE_PYTHON_KIVY
     # libavformat-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
     # libavcodec-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
     select BR2_PACKAGE_ZLIB  # zlib1g-dev Required by Kivy 2.1 (This package selection in yet to be confirmed)
-    # select BR2_PACKAGE_PANGO  # Missing during build if not selected. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
+    # select BR2_PACKAGE_PANGO  # Missing during build selected or not!!!. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
     # select BR2_PACKAGE_PANGOMM  # C++ API for Pango
+    select BR2_PACKAGE_MTDEV  # Multi-touch devices to use for input
+    select BR2_PACKAGE_LIBPNG
+    select BR2_PACKAGE_PYTHON_DOCUTILS
+    select BR2_PACKAGE_PYTHON_PYGMENTS
 
-    # To determine if those are required with 2.1 for Raspberry Pi 2
-    select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_IMAGE_BMP if BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_IMAGE_JPEG if BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_IMAGE_PNG if BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_MIXER if BR2_PACKAGE_SDL
-    select BR2_PACKAGE_SDL_TTF if BR2_PACKAGE_SDL
+    # # Yet to be determined if those are required with 2.1
+    # select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_SDL
+    # select BR2_PACKAGE_SDL_IMAGE_BMP if BR2_PACKAGE_SDL
+    # select BR2_PACKAGE_SDL_IMAGE_JPEG if BR2_PACKAGE_SDL
+    # select BR2_PACKAGE_SDL_IMAGE_PNG if BR2_PACKAGE_SDL
+    # select BR2_PACKAGE_SDL_MIXER if BR2_PACKAGE_SDL
+    # select BR2_PACKAGE_SDL_TTF if BR2_PACKAGE_SDL
 
-    # To determine if those can be optional
-    select BR2_PACKAGE_MTDEV  # Previous RPi2 package. And post v6. Also complains at deployment if not selected
-    select BR2_PACKAGE_LIBPNG  # Previous RPi2 package. And post v6
-    select BR2_PACKAGE_PYTHON_DOCUTILS  # Optional?
-    select BR2_PACKAGE_PYTHON_PYGMENTS  # Optional?
-
-    # To make optional
-    # select BR2_PACKAGE_GSTREAMER1  # libgstreamer1.0 gstreamer Optional by Kivy 2.1 for audio, video
-    # select BR2_PACKAGE_GST1_PLUGINS_BASE  # gstreamer1.0-plugins-base Optional by Kivy 2.1 for audio, video
-    # select BR2_PACKAGE_GST1_PLUGINS_GOOD  # gstreamer1.0-plugins-good Optional by Kivy 2.1 for audio, video
-    # select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO  # Otherwise we get at compile WARNING A problem occurred while running pkg-config --libs --cflags pangoft2 (code 1)
+    # TODO: When are those packages really needed?
+    select BR2_PACKAGE_UTIL_LINUX
+    select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+    select BR2_PACKAGE_PANGO
+    # select BR2_PACKAGE_PANGOMM
 
     help
         A software library for rapid development of
         hardware-accelerated multitouch applications.
 
+        Notice:
+        This is a work in progress. Any help is greatly appreciated.
+        
+        During build, for cases I haven't able to determine, it seems the Pago
+        package is required by Kivy.
+        
+        According to: https://kivy.org/doc/stable/api-kivy.graphics.cgl.html
+        Unix available GL backends: gl, sdl2
+
+
+        As this package is not mature yet, some post about achieving this or
+        simmilar to it can be found at       
+        http://lists.busybox.net/pipermail/buildroot/2019-June/253526.html
+        https://forums.raspberrypi.com/viewtopic.php?t=307052
+        https://forums.raspberrypi.com/viewtopic.php?t=242588
+
         http://kivy.org
 
 
-# Yet to be determined:
-    # select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2 # Otherwise get at compile gl_redirect.h fatal error GLES2/gl2.h No such file or directory 
-    # PANGO!!!
-    # Are those relevant?
-    # BR2_PACKAGE_LIBAVL related to libavcodec-dev
+if BR2_PACKAGE_PYTHON_KIVY
+
+config BR2_PACKAGE_PYTHON_KIVY_GSTREAMER
+    bool "GStreamer"
+    default n
+
+    select BR2_PACKAGE_GSTREAMER1  # libgstreamer1.0 gstreamer Optional by Kivy 2.1 for audio, video
+    select BR2_PACKAGE_GST1_PLUGINS_BASE  # gstreamer1.0-plugins-base Optional by Kivy 2.1 for audio, video
+    select BR2_PACKAGE_GST1_PLUGINS_BASE_INSTALL_TOOLS  # Install the gst-discoverer, gst-device-monitor and gst-play tools.    
+    # select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO  # Otherwise we get at compile WARNING A problem occurred while running pkg-config --libs --cflags pangoft2 (code 1)
+    select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA   # ALSA plugin library, mandatory for audio playback
+    select BR2_PACKAGE_GST1_PLUGINS_GOOD  # gstreamer1.0-plugins-good Optional by Kivy 2.1 for audio, video
+    select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT  # Plugin contains auto-detection plugins for video/audio in and outputs 
+    # select BR2_PACKAGE_UTIL_LINUX  
+    # select BR2_PACKAGE_UTIL_LINUX_LIBUUID  # Required to compile fontconfig-2.13.1
+
+    help
+        Audio and video support.
+
+config BR2_PACKAGE_PYTHON_KIVY_RPI
+    bool "Raspberry Pi"
+    default n
+
+    select BR2_PACKAGE_RPI_USERLAND  # Provides graphics hardware
+    # select BR2_PACKAGE_SDL=y  # To determine
+    select BR2_PACKAGE_SDL2_OPENGLES  # OpenGLES support
+
+    help
+        Select this for Raspberry Pi targets (Tested for Pi2).
+
+        Window provider will be sdl2
+        GL backendw will be sdl2/gl
+
+        The RPI_USERLAND package will be selected.
+
+        TODO: 
+        Provide a way to select window provider and GL backend according to: 
+        https://kivy.org/doc/stable/installation/installation-rpi.html
+
+config BR2_PACKAGE_PYTHON_KIVY_EXAMPLES
+    bool "Kivy examples"
+    default n
+
+    help
+        Enable this to keep Kivy examples.
+        If selected those wil be located at /usr/share/kivy-examples on the
+        target.
+
+endif

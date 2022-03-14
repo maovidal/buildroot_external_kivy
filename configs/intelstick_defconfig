@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
 BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
 BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.231"
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.234"
 BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
@@ -66,6 +66,13 @@ BR2_x86_atom=y
 # Kernel additional configuration
 BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/pc/STK1AW32SC/kernel/linux.fragment"
 
+# Nano editor
+BR2_PACKAGE_NANO=y
+# BR2_PACKAGE_SUDO=y
+# BR2_PACKAGE_OPENSSH=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="m"
+BR2_PACKAGE_DROPBEAR=y	# SSH
+
 # Overlay
 BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_KIVYCFG_PATH)/rootfs_overlay"
 
@@ -77,36 +84,114 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
 # Kivy graphics support
 # Intel Stick STK1AW32SC uses Open GL. Then, inspecting BR2_PACKAGE_HAS_LIBGL / (testing) BR2_PACKAGE_HAS_LIBEGL on menuconfig
 # it should be true.
+# According to: https://kivy.org/doc/stable/guide/architecture.html
+# The version we target is OpenGL 2.0 ES (GLES2) on all devices, so if you want to stay cross-platform compatible, we advise you to only use the GLES2 functions.
 # ##############################################################################
 
 BR2_PACKAGE_PYTHON_KIVY=y
+# BR2_PACKAGE_PYTHON_KIVY_GSTREAMER=y
 
-BR2_PACKAGE_SDL2_OPENGL  # OpenGL support
-BR2_PACKAGE_XORG7=y  # Required by SDL2 Open GL
-BR2_PACKAGE_LIBGLVND=y  # Required by BR2_PACKAGE_XORG7
-BR2_PACKAGE_LIBGLVND_DISPATCH_GL=y  # Required by BR2_PACKAGE_XORG7
-BR2_PACKAGE_SDL2_X11=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
-BR2_PACKAGE_XLIB_LIBXRENDER=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+# # ##############################################################################
+# ## Version OpenGLES with EGL, Mesa and GALLIUM_DRIVER_I915
+# # Does not compile if Kivy uses use_mesagl: kivy/graphics/opengl.c:5403:96: error: expected identifier before ‘;’ token
+# # Complied without use_mesagl, Kivy reports: No Window 
+# # ##############################################################################
 
-# Package selection specific for Intel devices with GPU i915 (Like STK1AW32SC). HELP with better detection of compatible devices.
-    # select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915 if BR2_x86_atom
-    # select BR2_PACKAGE_MESA3D_DRI_DRIVER_I915 if BR2_x86_atom
+# BR2_PACKAGE_SDL=y  # To determine
+# BR2_PACKAGE_SDL2_OPENGLES=y  # OpenGLES support
 
-# # Package selection for devices different than Raspberry Pi 2. HELP with better detection of compatible devices.
-#     # select BR2_PACKAGE_XORG7 if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
-#     select BR2_PACKAGE_MESA3D if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
+# BR2_PACKAGE_MESA3D=y
+# BR2_PACKAGE_MESA3D_OPENGL_ES=y
+# BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
+
+
+# # ##############################################################################
+# ## Version OpenGLES with X11, Mesa and GALLIUM_DRIVER_I915
+# # Cannot find X server
+# # ##############################################################################
+
+# # BR2_PACKAGE_SDL=y  # To determine
+# BR2_PACKAGE_SDL2_OPENGLES=y  # OpenGLES support
+# BR2_PACKAGE_SDL2_X11=y  # Prevents error kivy/core/window/_window_sdl2.c:7874:37: error: ‘union <anonymous>’ has no member named ‘x11’
+
+# BR2_PACKAGE_MESA3D=y
+# BR2_PACKAGE_MESA3D_OPENGL_ES=y
+# BR2_PACKAGE_MESA3D_OPENGL_EGL=y  # Required for BR2_PACKAGE_HAS_LIBEGL
+# BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
+# BR2_PACKAGE_XORG7=y  # Required by OPENGL_GLX
+# BR2_PACKAGE_XSERVER_XORG_SERVER=y  # Couln't connect to X server
+
+# # BR2_PACKAGE_SDL2_X11=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+# # BR2_PACKAGE_XLIB_LIBXRENDER=y  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+# # BR2_PACKAGE_HAS_LIBEGL_WAYLAND ?
+# # BR2_PACKAGE_WAYLAND ?
+
+# BR2_PACKAGE_LIBGLVND=y  # Provides the gl.h
+
+# # Testing: Complains Unable to find any valuable Text Provider
+# # BR2_PACKAGE_PYTHON_PILLOW=y
+
+
+# ##############################################################################
+## Version OpenGLES with DirectFB, Mesa and GALLIUM_DRIVER_I915
+# ##############################################################################
+
+BR2_PACKAGE_SDL2_OPENGLES=y  # OpenGLES support
+# BR2_PACKAGE_SDL_DIRECTFB=y
+BR2_PACKAGE_SDL2_DIRECTFB=y
+
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
+
+BR2_PACKAGE_DIRECTFB=y
+
+
+# Testing: Trying to provide frame. CRITICAL: Unable to get a Window.
+# /buildroot_output/host/lib/gcc/x86_64-buildroot-linux-gnu/10.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: cannot find -lGL
+# BR2_PACKAGE_SDL2_X11=y
+# BR2_PACKAGE_XORG7=y
+# BR2_PACKAGE_LIBGLVND=y
+
+
+# ##############################################################################
+# To pick:
+# ##############################################################################
+
+# BR2_PACKAGE_SDL2_KMSDRM=y  # KMS/DRM video driver  ???
+
+# BR2_PACKAGE_LIBGLVND=y
+# BR2_PACKAGE_LIBGLVND_DISPATCH_GLES=y
+# BR2_PACKAGE_LIBGLVND_DISPATCH_GL=y
+
+# BR2_PACKAGE_MESA3D=y
+
+# BR2_PACKAGE_MESA3D_LLVM=y
+# BR2_PACKAGE_MESA3D_OPENCL=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA=y
+# BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+# BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL=y
+# BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=y
+
+
+# BR2_PACKAGE_SDL2_X11 # Does not prevent error EGL/egl.h
 
 # # Mesa3D and OpenGL support.
 #     select BR2_PACKAGE_MESA3D_OPENGL_ES if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBGLES
 #     select BR2_PACKAGE_MESA3D_OPENGL_EGL if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBEGL
 #     select BR2_PACKAGE_MESA3D_OPENGL_GLX if BR2_PACKAGE_MESA3D && BR2_PACKAGE_HAS_LIBEGL
-
-    # select BR2_PACKAGE_LIBGLVND  # Not? Por JMVA resolviendo para Intel Stick. ESTE DESHABILITA SDL2
-    # select BR2_PACKAGE_XSERVER_XORG_SERVER if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
-
-    # Testing
-    # select BR2_PACKAGE_SDL2_X11 # Does not prevent error EGL/egl.h
-
-    # Testing
-    # select BR2_PACKAGE_LIBGLVND if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4
-    # select BR2_PACKAGE_LIBGLVND_DISPATCH_GL if !BR2_arm && !BR2_cortex_a7 && !BR2_ARM_FPU_NEON_VFPV4

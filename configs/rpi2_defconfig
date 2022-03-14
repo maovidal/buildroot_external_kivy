@@ -44,6 +44,9 @@ BR2_PACKAGE_WIRELESS_REGDB=y
 # Custom config
 BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/raspberry/pi2/singleboot/config.txt"
 
+# Nano editor
+select BR2_PACKAGE_NANO if BR2_USE_WCHAR
+
 # Overlay
 BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_KIVYCFG_PATH)/rootfs_overlay"
 
@@ -58,7 +61,4 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
 # ##############################################################################
 
 BR2_PACKAGE_PYTHON_KIVY=y
-
-BR2_PACKAGE_RPI_USERLAND=y  # Provides graphics hardware
-BR2_PACKAGE_SDL=y  # To determine
-BR2_PACKAGE_SDL2_OPENGLES=y  # OpenGLES support (Like Raspberry Pi2)
+BR2_PACKAGE_PYTHON_KIVY_RPI=y

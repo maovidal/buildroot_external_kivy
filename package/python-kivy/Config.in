@@ -15,26 +15,15 @@ config BR2_PACKAGE_PYTHON_KIVY
     # libavformat-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
     # libavcodec-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
     select BR2_PACKAGE_ZLIB  # zlib1g-dev Required by Kivy 2.1 (This package selection in yet to be confirmed)
-    # select BR2_PACKAGE_PANGO  # Missing during build selected or not!!!. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
-    # select BR2_PACKAGE_PANGOMM  # C++ API for Pango
     select BR2_PACKAGE_MTDEV  # Multi-touch devices to use for input
     select BR2_PACKAGE_LIBPNG
     select BR2_PACKAGE_PYTHON_DOCUTILS
     select BR2_PACKAGE_PYTHON_PYGMENTS
 
-    # # Yet to be determined if those are required with 2.1
-    # select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_SDL
-    # select BR2_PACKAGE_SDL_IMAGE_BMP if BR2_PACKAGE_SDL
-    # select BR2_PACKAGE_SDL_IMAGE_JPEG if BR2_PACKAGE_SDL
-    # select BR2_PACKAGE_SDL_IMAGE_PNG if BR2_PACKAGE_SDL
-    # select BR2_PACKAGE_SDL_MIXER if BR2_PACKAGE_SDL
-    # select BR2_PACKAGE_SDL_TTF if BR2_PACKAGE_SDL
-
     # TODO: When are those packages really needed?
-    select BR2_PACKAGE_UTIL_LINUX
-    select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-    select BR2_PACKAGE_PANGO
-    # select BR2_PACKAGE_PANGOMM
+    select BR2_PACKAGE_UTIL_LINUX  # Required by LIBUUID
+    select BR2_PACKAGE_UTIL_LINUX_LIBUUID  # Required by PANGO
+    select BR2_PACKAGE_PANGO  # Missing during build selected or not!!!. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
 
     help
         A software library for rapid development of
@@ -83,20 +72,65 @@ config BR2_PACKAGE_PYTHON_KIVY_RPI
     default n
 
     select BR2_PACKAGE_RPI_USERLAND  # Provides graphics hardware
-    # select BR2_PACKAGE_SDL=y  # To determine
     select BR2_PACKAGE_SDL2_OPENGLES  # OpenGLES support
 
     help
         Select this for Raspberry Pi targets (Tested for Pi2).
 
         Window provider will be sdl2
-        GL backendw will be sdl2/gl
+        GL backend will be sdl2/gl
 
         The RPI_USERLAND package will be selected.
 
         TODO: 
         Provide a way to select window provider and GL backend according to: 
         https://kivy.org/doc/stable/installation/installation-rpi.html
+
+config BR2_PACKAGE_PYTHON_KIVY_GLES_MESA_X11E
+    bool "OpenGLES, Mesa, X11 Embedded"
+    default n
+
+    select BR2_PACKAGE_SDL2_OPENGLES  # OpenGLES support
+
+    select BR2_PACKAGE_MESA3D   # Confirmed
+    select BR2_PACKAGE_MESA3D_OPENGL_ES
+    select BR2_PACKAGE_MESA3D_OPENGL_EGL  # Required for BR2_PACKAGE_HAS_LIBEGL
+    select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST  # Confirmed  # Required. Otherwise Kivy at runtime reports: libGL error: MESA-LOADER: failed to open swrast
+
+    select BR2_PACKAGE_SDL2_X11  # Prevents error kivy/core/window/_window_sdl2.c:7874:37: error: ‘union <anonymous>’ has no member named ‘x11’  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+    select BR2_PACKAGE_MESA3D_OPENGL_GLX
+    select BR2_PACKAGE_XORG7    # Confirmed  # Required by OPENGL_GLX
+    select BR2_PACKAGE_XSERVER_XORG_SERVER  # Confirmed
+    select BR2_PACKAGE_XLIB_LIBXRENDER  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+
+# BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE=y
+# BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB=y
+
+    select BR2_PACKAGE_XAPP_XINIT
+    select BR2_PACKAGE_XAPP_TWM
+    select BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
+    select BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
+    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+#REM: BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
+    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA
+    select BR2_PACKAGE_XTERM
+    select BR2_USE_WCHAR
+
+    select BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV  # To determine if required
+
+# BR2_PACKAGE_SDL2_KMSDRM # Can be of any bennefit?
+# BR2_PACKAGE_WAYLAND # Option for X11?
+
+    # TESTING AFTER Couldn't connect to X Server. Enabling below
+    # REASON: BR2_PACKAGE_HAS_LIBGLES does not gets y.
+    # RESULT: Int completes compiling. But while compiling returns ERROR: Dependency for context.pyx not resolved: config.pxi ...
+    # select BR2_PACKAGE_LIBGLVND  # Provides the gl.h
+
+    help
+        Additional Mesa drivers are not installed
+
+        Window provider will be X11
+        GL backend will be sdl2
 
 config BR2_PACKAGE_PYTHON_KIVY_EXAMPLES
     bool "Kivy examples"

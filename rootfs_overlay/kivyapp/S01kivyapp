@@ -1,2 +1,0 @@
-#!/bin/sh
-python /kivyapp/kivyapp.py > /tmp/errlog.txt 2>&1 &

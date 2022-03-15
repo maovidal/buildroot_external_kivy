@@ -68,8 +68,6 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(BR2_EXTERNAL_KIVYCFG_PATH)/board/pc/ST
 
 # Nano editor
 BR2_PACKAGE_NANO=y
-# BR2_PACKAGE_SUDO=y
-# BR2_PACKAGE_OPENSSH=y
 BR2_TARGET_GENERIC_ROOT_PASSWD="1"
 BR2_PACKAGE_DROPBEAR=y	# SSH
 BR2_PACKAGE_DHCPCD=y
@@ -82,23 +80,17 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
 
 
 # ##############################################################################
-# Kivy graphics support
-# Intel Stick STK1AW32SC uses Open GL. Then, inspecting BR2_PACKAGE_HAS_LIBGL / (testing) BR2_PACKAGE_HAS_LIBEGL on menuconfig
-# it should be true.
-# According to: https://kivy.org/doc/stable/guide/architecture.html
-# The version we target is OpenGL 2.0 ES (GLES2) on all devices, so if you want to stay cross-platform compatible, we advise you to only use the GLES2 functions.
+# Kivy graphics support (Uses Open GL)
+# Intel Stick STK1AW32SC
 # ##############################################################################
 
 BR2_PACKAGE_PYTHON_KIVY=y
-BR2_PACKAGE_PYTHON_KIVY_GLES_MESA_X11E=y    # GLES, Mesa and X11 Embedded
+BR2_PACKAGE_PYTHON_KIVY_GLES_MESA_X11=y  # GLES, Mesa and X11 Embedded
 # BR2_PACKAGE_PYTHON_KIVY_GSTREAMER=y
 
-# Hardware specific
+# Hardware specific in the case of the Intel Stick STK1AW32SC
 # BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915=y
-# BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
 
 # X11 related
-BR2_PACKAGE_X11VNC=y    # Optional, to provide a VNC service
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y   # Haven't been able to test KDrive
-# BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE=y
-# select BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE if BR2_PACKAGE_XSERVER_XORG_SERVER # This variant of the X.org server is a lightweight version intended for embedded systems
+BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE=y  # Use KDrive instead of the Modular
+# BR2_PACKAGE_X11VNC=y  # Optional, to provide a VNC service

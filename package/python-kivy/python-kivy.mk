@@ -28,8 +28,6 @@ PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2  # Without thi
 ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
     PYTHON_KIVY_DEPENDENCIES += libgl
     PYTHON_KIVY_ENV += USE_OPENGL_MOCK=0
-    # PYTHON_KIVY_ENV += USE_OPENGL_ES2=1
-
 else ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
     PYTHON_KIVY_DEPENDENCIES += libgles
     PYTHON_KIVY_ENV += USE_OPENGL_ES2=1
@@ -92,9 +90,9 @@ endif
 
 ifeq ($(BR2_PACKAGE_PYTHON_KIVY_GSTREAMER),y)
     PYTHON_KIVY_DEPENDENCIES += gstreamer1
-    PYTHON_KIVY_ENV += USE_GSTREAMER=1  # Should it be GSTREAMER (deprecated?) or GSTREAMER1
+    PYTHON_KIVY_ENV += USE_GSTREAMER=1  # Should it be GSTREAMER (deprecated?) or GSTREAMER1?
 else
-    PYTHON_KIVY_ENV += USE_GSTREAMER=0  # Should it be GSTREAMER (deprecated?) or GSTREAMER1
+    PYTHON_KIVY_ENV += USE_GSTREAMER=0  # Should it be GSTREAMER (deprecated?) or GSTREAMER1?
 endif
 
 #
@@ -113,14 +111,16 @@ endif
 #
 
 define PYTHON_KIVY_REMOVE_EXAMPLES
+    # TODO: This comparison does not work as BR2_PACKAGE_PYTHON_KIVY_EXAMPLES is not available when called resulting in the error: `ifeq (,y)'
     # ifeq ($(BR2_PACKAGE_PYTHON_KIVY_EXAMPLES),y)
     #     echo "Kivy examples left at /usr/share/kivy-examples"
     # else
     #     rm -rf $(TARGET_DIR)/usr/share/kivy-examples
     #     echo "Kivy examples removed"
     # endif
-    # TODO: Above does not work. BR2_PACKAGE_PYTHON_KIVY_EXAMPLES is not available then there is an error: `ifeq (,y)'
+    # It removes the examples anyway.
     rm -rf $(TARGET_DIR)/usr/share/kivy-examples
+    echo "Kivy examples removed"
 endef
 
 PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES

@@ -2,50 +2,51 @@ config BR2_PACKAGE_PYTHON_KIVY
     bool "python-kivy"
     default n
 
-    # According to official Kivy documentation and from inspecting different
+    # According to official Kivy 2.1 documentation and from inspecting different
     # build results the next are required:
     select BR2_PACKAGE_HOST_PYTHON_CYTHON
     select BR2_PACKAGE_PYTHON3
-    select BR2_PACKAGE_SDL2  # libsdl2-dev Required by Kivy 2.1
-    select BR2_PACKAGE_SDL2_IMAGE  # libsdl2-image-dev Required by Kivy 2.1
-    select BR2_PACKAGE_SDL2_MIXER  # libsdl2-mixer-dev Required by Kivy 2.1
-    select BR2_PACKAGE_SDL2_TTF  # libsdl2-ttf-dev Required by Kivy 2.1
-    # PACKAGE CANDIDATE NOT FOUND YET for: # libportmidi-dev Required by Kivy 2.1
-    # libswscale-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
-    # libavformat-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
-    # libavcodec-dev Required by Kivy 2.1. Inspecting the build process those are included. No idea how.
-    select BR2_PACKAGE_ZLIB  # zlib1g-dev Required by Kivy 2.1 (This package selection in yet to be confirmed)
+    select BR2_PACKAGE_SDL2  # libsdl2-dev
+    select BR2_PACKAGE_SDL2_IMAGE  # libsdl2-image-dev
+    select BR2_PACKAGE_SDL2_MIXER  # libsdl2-mixer-dev
+    select BR2_PACKAGE_SDL2_TTF  # libsdl2-ttf-dev
+    select BR2_PACKAGE_ZLIB  # zlib1g-dev
     select BR2_PACKAGE_MTDEV  # Multi-touch devices to use for input
     select BR2_PACKAGE_LIBPNG
     select BR2_PACKAGE_PYTHON_DOCUTILS
     select BR2_PACKAGE_PYTHON_PYGMENTS
 
-    # TODO: When are those packages really needed?
+    # The next requirements according to the Kivy 2.1 documentation, have not
+    # been identified, but seem to be included somehow:
+    # libportmidi-dev
+    # libswscale-dev
+    # libavformat-dev
+    # libavcodec-dev
+
+    # TODO: Determine why are the next packages required in some cases
     select BR2_PACKAGE_UTIL_LINUX  # Required by LIBUUID
-    select BR2_PACKAGE_UTIL_LINUX_LIBUUID  # Required by PANGO
-    select BR2_PACKAGE_PANGO  # Missing during build selected or not!!!. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
+    select BR2_PACKAGE_UTIL_LINUX_LIBUUID  # Required by PANGO dependency on fontconfig-2.13.1
+    select BR2_PACKAGE_PANGO  # Some Kivy builds report missing this. Pango is a library for laying out and rendering of text, with an emphasis on internationalization
 
     help
         A software library for rapid development of
         hardware-accelerated multitouch applications.
 
+        http://kivy.org
+
+        CGL: standard C interface for OpenGL
+        https://kivy.org/doc/stable/api-kivy.graphics.cgl.html
+
+
         Notice:
         This is a work in progress. Any help is greatly appreciated.
-        
-        During build, for cases I haven't able to determine, it seems the Pago
-        package is required by Kivy.
-        
-        According to: https://kivy.org/doc/stable/api-kivy.graphics.cgl.html
-        Unix available GL backends: gl, sdl2
-
-
-        As this package is not mature yet, some post about achieving this or
-        simmilar to it can be found at       
+        https://github.com/MrMauro/buildroot_external_kivy/tree/main/package/python-kivy
+      
+        Those references are among the sources used to build this:
+        https://github.com/foozmeat/hotline/tree/master/buildroot/hotline-external/package/python-kivy
         http://lists.busybox.net/pipermail/buildroot/2019-June/253526.html
         https://forums.raspberrypi.com/viewtopic.php?t=307052
         https://forums.raspberrypi.com/viewtopic.php?t=242588
-
-        http://kivy.org
 
 
 if BR2_PACKAGE_PYTHON_KIVY
@@ -57,12 +58,9 @@ config BR2_PACKAGE_PYTHON_KIVY_GSTREAMER
     select BR2_PACKAGE_GSTREAMER1  # libgstreamer1.0 gstreamer Optional by Kivy 2.1 for audio, video
     select BR2_PACKAGE_GST1_PLUGINS_BASE  # gstreamer1.0-plugins-base Optional by Kivy 2.1 for audio, video
     select BR2_PACKAGE_GST1_PLUGINS_BASE_INSTALL_TOOLS  # Install the gst-discoverer, gst-device-monitor and gst-play tools.    
-    # select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO  # Otherwise we get at compile WARNING A problem occurred while running pkg-config --libs --cflags pangoft2 (code 1)
     select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA   # ALSA plugin library, mandatory for audio playback
     select BR2_PACKAGE_GST1_PLUGINS_GOOD  # gstreamer1.0-plugins-good Optional by Kivy 2.1 for audio, video
     select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT  # Plugin contains auto-detection plugins for video/audio in and outputs 
-    # select BR2_PACKAGE_UTIL_LINUX  
-    # select BR2_PACKAGE_UTIL_LINUX_LIBUUID  # Required to compile fontconfig-2.13.1
 
     help
         Audio and video support.
@@ -86,51 +84,40 @@ config BR2_PACKAGE_PYTHON_KIVY_RPI
         Provide a way to select window provider and GL backend according to: 
         https://kivy.org/doc/stable/installation/installation-rpi.html
 
-config BR2_PACKAGE_PYTHON_KIVY_GLES_MESA_X11E
-    bool "OpenGLES, Mesa, X11 Embedded"
+config BR2_PACKAGE_PYTHON_KIVY_GLES_MESA_X11
+    bool "OpenGLES, Mesa, X11"
     default n
 
+    select BR2_PACKAGE_SDL2_OPENGL  # Option?
     select BR2_PACKAGE_SDL2_OPENGLES  # OpenGLES support
 
-    select BR2_PACKAGE_MESA3D   # Confirmed
+    select BR2_PACKAGE_MESA3D
     select BR2_PACKAGE_MESA3D_OPENGL_ES
-    select BR2_PACKAGE_MESA3D_OPENGL_EGL  # Required for BR2_PACKAGE_HAS_LIBEGL
-    select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST  # Confirmed  # Required. Otherwise Kivy at runtime reports: libGL error: MESA-LOADER: failed to open swrast
+    select BR2_PACKAGE_MESA3D_OPENGL_EGL
+    select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST  # Required, otherwise Kivy at runtime reports: libGL error: MESA-LOADER: failed to open swrast
 
-    select BR2_PACKAGE_SDL2_X11  # Prevents error kivy/core/window/_window_sdl2.c:7874:37: error: ‘union <anonymous>’ has no member named ‘x11’  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
+    select BR2_PACKAGE_SDL2_X11  # Required, otherwise Kivy won't compile reporting error: ...has no member named ‘x11’
     select BR2_PACKAGE_MESA3D_OPENGL_GLX
-    select BR2_PACKAGE_XORG7    # Confirmed  # Required by OPENGL_GLX
-    select BR2_PACKAGE_XSERVER_XORG_SERVER  # Confirmed
-    select BR2_PACKAGE_XLIB_LIBXRENDER  # Prevents error at runtime: Unable to find any valuable Window Provider. No available video device
-
-# BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE=y
-# BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB=y
+    select BR2_PACKAGE_XORG7
+    select BR2_PACKAGE_XLIB_LIBXRENDER
+    select BR2_PACKAGE_XSERVER_XORG_SERVER
 
     select BR2_PACKAGE_XAPP_XINIT
     select BR2_PACKAGE_XAPP_TWM
-    select BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
-    select BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
-    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
-#REM: BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
-    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA
+    select BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD if !BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+    select BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE if !BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL if !BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+    select BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA if !BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
     select BR2_PACKAGE_XTERM
-    select BR2_USE_WCHAR
-
-    select BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV  # To determine if required
-
-# BR2_PACKAGE_SDL2_KMSDRM # Can be of any bennefit?
-# BR2_PACKAGE_WAYLAND # Option for X11?
-
-    # TESTING AFTER Couldn't connect to X Server. Enabling below
-    # REASON: BR2_PACKAGE_HAS_LIBGLES does not gets y.
-    # RESULT: Int completes compiling. But while compiling returns ERROR: Dependency for context.pyx not resolved: config.pxi ...
-    # select BR2_PACKAGE_LIBGLVND  # Provides the gl.h
 
     help
-        Additional Mesa drivers are not installed
+        Additional Mesa and X11 drivers are not installed.
 
-        Window provider will be X11
-        GL backend will be sdl2
+        To enable X11 KDrive (instead of the default Modular), select
+        manually BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE=y
+
+        Window provider for Kivy will be X11.
+        GL backend for Kivy will be sdl2.
 
 config BR2_PACKAGE_PYTHON_KIVY_EXAMPLES
     bool "Kivy examples"

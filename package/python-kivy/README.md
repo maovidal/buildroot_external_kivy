@@ -34,7 +34,7 @@ For reference, the current 2.1.0, while building reports these options:
 *Remark: USE_SDL seems to be deprecated in Kivy 2.1.0*
 
 
-# Packages that may be useful or yet to evaluate:
+# Packages that may be useful or yet to be evaluated:
 
 * BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB  # Frame buffer?
 * BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV  # framebuffer device video driver for the Xorg X server

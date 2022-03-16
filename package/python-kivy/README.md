@@ -1,18 +1,12 @@
 This is an attempt to create a Kivy package for Buildroot.
 
-To get an idea of what components are involved in a compilation, here there is
-an overview of Kivy's architecture:
-https://kivy.org/doc/stable/guide/architecture.html
+To get an idea of what components are involved in a compilation, here there is an overview of Kivy's architecture: https://kivy.org/doc/stable/guide/architecture.html
 
-While this package aims to effectively build the basic Kivy package based on the
-official requirements the idea is to extend it to other common package
-selections providing options over the base package.
+While this package aims to effectively build the basic Kivy package based on the official requirements the idea is to extend it to other common package selections providing options over the base package.
 
-This is a work in progress, and so far has been produced with my limited
-knowledge about all the software involved. I'm willing to learn and hopefully
-be of help to others. This repo is open to pull requests.
+This is a work in progress, and so far has been produced with my limited knowledge about all the software involved. I'm willing to learn and hopefully be of help to others. This repo is open to pull requests.
 
-On the code, the parts that need more attention are tagged with the word TODO:
+On the code, the parts that need more attention are tagged with `TODO:`
 
 
 # Kivy compilation options
@@ -42,9 +36,9 @@ For reference, the current 2.1.0, while building reports these options:
 
 # Packages that may be useful or yet to evaluate:
 
-BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB  # Frame buffer?
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV  # framebuffer device video driver for the Xorg X server
-BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV  # To determine if required
-BR2_PACKAGE_SDL2_KMSDRM  # Can be of any bennefit?
-BR2_PACKAGE_WAYLAND  # Option to X11?
-BR2_PACKAGE_LIBGLVND  # Provides the gl.h
+* BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB  # Frame buffer?
+* BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV  # framebuffer device video driver for the Xorg X server
+* BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV  # To determine if required
+* BR2_PACKAGE_SDL2_KMSDRM  # Can be of any bennefit?
+* BR2_PACKAGE_WAYLAND  # Option to X11?
+* BR2_PACKAGE_LIBGLVND  # Provides the gl.h

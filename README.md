@@ -1,6 +1,6 @@
 # Intro
 
-**Help and pull requests are welcome**
+*⚠️ Help and pull requests are welcome ⚠️*
 
 The purpose of this repo is to use `Buildroot` to produce images that run a `Kivy` app.
 Currently `Raspberry Pi2` and `Intel Stick STK1AW32SC` have been tested and
@@ -85,7 +85,7 @@ Then you can use usual commands like this:
 
 # Use of the images produced
 
-The current produced images are quite yer to be polished.
+The current produced images are yet to be polished.
 
 - SSH access as been enabled for user `root` with password `1`
 - There is a folder `kivyapp` that have some very simple `hello world` test.
@@ -108,12 +108,12 @@ That should display the `hello world` test.
 
 # About the Kivy Package for Buildroot
 
-Details about the purpose and status of this `Kivy Package` can be found [at package/python-kivy/README.md][package_python_kivy_README].
+Details about the purpose and status of this `Kivy Package` can be found [at package/python-kivy/][package_python_kivy].
 
 
 # Extra work with the Raspberry Pi2
 
-*This is still work in progress*
+*⚠️ This is still work in progress ⚠️*
 
 The next content has been based on [this great post that shows how to build Kivy running on a RP2][evgueni_post] by [evgueni][evgueni] with the idea to extend the use of the image produced for the `Pi2`.
 
@@ -215,4 +215,4 @@ This software is licensed under MIT License.
 [evgueni]:https://forums.raspberrypi.com/memberlist.php?mode=viewprofile&u=208985&sid=be8a772e5aef87a4991576d69e510cce
 [evgueni_post]:https://forums.raspberrypi.com/viewtopic.php?t=307052&sid=b8bbc7d25cf2b58cb6d4a35edd716d6a
 [docker-buildroot]:https://github.com/vidalastudillo/docker-buildroot
-[package_python_kivy_README]:/package/python-kivy/README.md
+[package_python_kivy]:/package/python-kivy/

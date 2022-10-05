@@ -38,10 +38,10 @@ docker build -t "advancedclimatesystems/buildroot" .
 4. Create a `data-only` container:
 
 ``` shell
-docker run -i --name buildroot_output advancedclimatesystems/buildroot /bin/echo "Data only."
+docker run -i --name buildroot_kivy_output advancedclimatesystems/buildroot /bin/echo "Just Kivy data from Buildroot."
 ```
 
-This container has 2 volumes at `/root/buildroot/dl` and `/buildroot_output`.
+This container has 2 volumes at `/root/buildroot/dl` and `/buildroot_kivy_output`.
 Buildroot downloads all data to the first volume, the last volume is used as build cache, cross compiler and build results.
 
 5. Setup the new external folder and load the default configuration:

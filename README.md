@@ -90,20 +90,20 @@ The current produced images are yet to be polished.
 - SSH access as been enabled for user `root` with password `1`
 - There is a folder `kivyapp` that have some very simple `hello world` test.
 
-On the Intel Stick version, the `X11` is implemented. Upon start, a black 
-screen is displayed on the monitor. It is necessary to login via SSH and issue:
+~~On the Intel Stick version, the `X11` is implemented. Upon start, a black 
+screen is displayed on the monitor. It is necessary to login via SSH and issue:~~
 
-``` shell
-startx
-```
+~~``` shell~~
+~~startx~~
+~~```~~
 
-The monitor will now display a couple of windows. On the labeled `xterm` type
+~~The monitor will now display a couple of windows. On the labeled `xterm` type~~
 
-``` shell
+~~``` shell~~
 python simpletest.py
-```
+~~```~~
 
-That should display the `hello world` test.
+~~That should display the `hello world` test.~~
 
 
 # About the Kivy Package for Buildroot
